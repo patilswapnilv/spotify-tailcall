@@ -1,0 +1,16 @@
+query following @rest(method: GET, path: "/following") {
+  following {
+    artists {
+      items {
+        id
+        name
+        popularity
+        top_tracks {
+          tracks {
+            name
+          }
+        }
+      }
+    }
+  }
+}

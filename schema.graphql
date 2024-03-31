@@ -1,0 +1,53 @@
+schema
+  @server(port: 8000, graphiql: true)
+  @upstream(baseURL: "https://api.spotify.com/v1")
+  @link(type: Operation, src: "rest-api.graphql") {
+  query: Query
+}
+
+type Query {
+  following: ArtistsObject
+    @http(
+      path: "/me/following?type=artist"
+      headers: [{ key: "Authorization", value: "Bearer {{env.AUTH_TOKEN}}" }]
+    )
+  top_tracks(id: String!): TopTracksObject
+    @http(
+      path: "/artists/{{args.id}}/top-tracks"
+      headers: [{ key: "Authorization", value: "Bearer {{env.AUTH_TOKEN}}" }]
+    )
+}
+
+type ArtistsResponse {
+  href: String!
+  limit: Int!
+  next: String
+  total: Int!
+  items: [Artist]!
+}
+
+type Track {
+  id: String!
+  name: String!
+}
+
+type ArtistsObject {
+  artists: ArtistsResponse!
+}
+
+type TopTracksObject {
+  tracks: [Track!]!
+}
+
+type Artist {
+  id: String!
+  name: String!
+  popularity: Int!
+
+  # Expand Artist info with their top tracks
+  top_tracks: TopTracksObject
+    @http(
+      path: "/artists/{{value.id}}/top-tracks"
+      headers: [{ key: "Authorization", value: "Bearer {{env.AUTH_TOKEN}}" }]
+    )
+}
