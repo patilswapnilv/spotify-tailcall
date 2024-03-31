@@ -1,5 +1,8 @@
 A demo for tailcall using the Spotify API; to get details of artists followed by a user on Spotify.
 
+
+![Screenshot](_assets/screenshot.jpg)
+
 ## Installation
 
 ### NPM
